@@ -15,7 +15,7 @@ export default function LeafletMap() {
 
 
     return (
-        <div id='map' className='overflow-hidden h-[500px] w-[90%] rounded-xl shadow my-10 '>
+        <div id='map' className='overflow-hidden h-[500px] w-[90%] rounded-xl shadow  '>
             <MapContainer
                 center={[42, -72]} zoom={6} scrollWheelZoom={true} style={{ height: 500, width: "100%" }}>
                 <TileLayer
@@ -26,6 +26,9 @@ export default function LeafletMap() {
                     click: (e) => {
                         console.log('marker clicked', e)
                     },
+                    mouseover: (e) => {
+                        console.log('marker mouseover', e)
+                    }
                 }} position={[38.8737592, -77.002417]} icon={myIcon}>
                     <p>test</p>
                     <Popup>Popup for Marker</Popup>
