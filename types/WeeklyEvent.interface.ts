@@ -5,6 +5,7 @@ export default interface WeeklyEvent {
     tags: string[];
     eventLink: string;
     season: 'spring' | 'summer' | 'fall' | 'winter';
+    host: string;
     startTime?: string;
     startDate?: Date;
     endDate?: Date;
