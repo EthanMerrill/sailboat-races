@@ -9,7 +9,7 @@ const Map = dynamic(() => import('@/components/LeafletMap'), // replace '@compon
 ) 
 
 function InteractiveMap() {
-  return <Map />
+  return <Map/>
 }
 
 export default InteractiveMap

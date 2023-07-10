@@ -2,10 +2,20 @@
 import { MapContainer, Marker, Popup, TileLayer, CircleMarker } from 'react-leaflet'
 import marker from '@/assets/location-dot-solid.svg';
 import { Icon } from 'leaflet'
-import L from 'leaflet';
+import { LatLngExpression } from 'leaflet';
+import { useRef } from 'react';
 
+const center = [41, -72] as LatLngExpression
+const zoom = 6
 
 export default function LeafletMap() {
+    const map = useRef<L.Map>();
+    const setMap = (ref: L.Map) => {
+        map.current = ref;
+    }
+
+    console.log('map', map.current)
+
 
     const myIcon = new Icon({
         iconUrl: marker.src,
@@ -15,9 +25,9 @@ export default function LeafletMap() {
 
 
     return (
-        <div id='map' className='overflow-hidden h-[500px] w-[90%] rounded-xl shadow  '>
+        <div id='map' className='overflow-hidden h-[500px] w-[90%] rounded-xl shadow'>
             <MapContainer
-                center={[42, -72]} zoom={6} scrollWheelZoom={true} style={{ height: 500, width: "100%" }}>
+                center={center} zoom={zoom} scrollWheelZoom={true} style={{ height: 500, width: "100%" }} ref={setMap}>
                 <TileLayer
                     // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
