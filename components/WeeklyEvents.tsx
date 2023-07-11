@@ -1,5 +1,21 @@
+import { Organizations } from "@/src/models";
 import DayOfTheWeek from "./DayOfTheWeek";
 import WeeklyEvent from "@/types/WeeklyEvent.interface";
+import { DataStore } from 'aws-amplify';
+import awsExports from "./../src/aws-exports";
+import Amplify from "@aws-amplify/core";
+
+Amplify.configure(awsExports);
+
+async function queryClubs() {
+// Simple query
+try {
+    const posts = await DataStore.query(Organizations);
+    console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
+  } catch (error) {
+    console.log('Error retrieving posts', error);
+  }
+}
 
 export default function WeeklyEvents() {
 
@@ -13,6 +29,8 @@ export default function WeeklyEvents() {
         season: 'summer',
         host: 'Eastport Yacht Club'
     }
+
+    console.log('queryClubs', queryClubs())
 
     return (
         <div className="mx-8 sm:mx-2  bg-zinc-100 rounded-2xl shadow" >
