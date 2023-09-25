@@ -2,91 +2,136 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
 
+export enum DayOfTheWeek {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY"
+}
+
 export enum EventType {
-  SERIES = "SERIES",
   DISTANCE_RACE = "DISTANCE_RACE",
-  LOCAL_EVENT = "LOCAL_EVENT",
-  PURSUIT_RACE = "PURSUIT_RACE"
+  PURSUIT_RACE = "PURSUIT_RACE",
+  AROUND_CANS = "AROUND_CANS"
 }
 
+type EagerAddressType = {
+  readonly Street?: string | null;
+  readonly City?: string | null;
+  readonly State?: string | null;
+  readonly Zip?: string | null;
+}
 
+type LazyAddressType = {
+  readonly Street?: string | null;
+  readonly City?: string | null;
+  readonly State?: string | null;
+  readonly Zip?: string | null;
+}
 
-type EagerEvents = {
+export declare type AddressType = LazyLoading extends LazyLoadingDisabled ? EagerAddressType : LazyAddressType
+
+export declare const AddressType: (new (init: ModelInit<AddressType>) => AddressType)
+
+type EagerSailingEvent = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Events, 'id'>;
+    identifier: ManagedIdentifier<SailingEvent, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly eventName?: string | null;
-  readonly eventType?: EventType | keyof typeof EventType | null;
-  readonly eventDays?: string | null;
-  readonly eventDate?: string | null;
-  readonly eventDescription?: string | null;
-  readonly organizationsID: string;
+  readonly name: string;
+  readonly link?: string | null;
+  readonly date?: string | null;
+  readonly description?: string | null;
+  readonly series?: boolean | null;
+  readonly dayOfWeek?: DayOfTheWeek | keyof typeof DayOfTheWeek | null;
+  readonly type?: EventType | keyof typeof EventType | null;
+  readonly hostClubs?: (SailingOrganization | null)[] | null;
+  readonly weeklyEvent?: boolean | null;
+  readonly startDate?: string | null;
+  readonly endDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyEvents = {
+type LazySailingEvent = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Events, 'id'>;
+    identifier: ManagedIdentifier<SailingEvent, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly eventName?: string | null;
-  readonly eventType?: EventType | keyof typeof EventType | null;
-  readonly eventDays?: string | null;
-  readonly eventDate?: string | null;
-  readonly eventDescription?: string | null;
-  readonly organizationsID: string;
+  readonly name: string;
+  readonly link?: string | null;
+  readonly date?: string | null;
+  readonly description?: string | null;
+  readonly series?: boolean | null;
+  readonly dayOfWeek?: DayOfTheWeek | keyof typeof DayOfTheWeek | null;
+  readonly type?: EventType | keyof typeof EventType | null;
+  readonly hostClubs: AsyncCollection<SailingOrganization>;
+  readonly weeklyEvent?: boolean | null;
+  readonly startDate?: string | null;
+  readonly endDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type Events = LazyLoading extends LazyLoadingDisabled ? EagerEvents : LazyEvents
+export declare type SailingEvent = LazyLoading extends LazyLoadingDisabled ? EagerSailingEvent : LazySailingEvent
 
-export declare const Events: (new (init: ModelInit<Events>) => Events) & {
-  copyOf(source: Events, mutator: (draft: MutableModel<Events>) => MutableModel<Events> | void): Events;
+export declare const SailingEvent: (new (init: ModelInit<SailingEvent>) => SailingEvent) & {
+  copyOf(source: SailingEvent, mutator: (draft: MutableModel<SailingEvent>) => MutableModel<SailingEvent> | void): SailingEvent;
 }
 
-type EagerOrganizations = {
+type EagerSailingOrganization = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Organizations, 'id'>;
+    identifier: ManagedIdentifier<SailingOrganization, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly latLong?: string | null;
-  readonly address?: string | null;
-  readonly city?: string | null;
-  readonly state?: string | null;
-  readonly zip?: string | null;
+  readonly name?: string | null;
   readonly website?: string | null;
   readonly fleets?: string | null;
-  readonly Events?: (Events | null)[] | null;
+  readonly latLong?: string | null;
+  readonly eventsID?: string | null;
+  readonly email?: string | null;
+  readonly Facebook?: string | null;
+  readonly Twitter?: string | null;
+  readonly street?: string | null;
+  readonly city?: string | null;
+  readonly phone?: string | null;
+  readonly zip?: number | null;
+  readonly state?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyOrganizations = {
+type LazySailingOrganization = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Organizations, 'id'>;
+    identifier: ManagedIdentifier<SailingOrganization, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly latLong?: string | null;
-  readonly address?: string | null;
-  readonly city?: string | null;
-  readonly state?: string | null;
-  readonly zip?: string | null;
+  readonly name?: string | null;
   readonly website?: string | null;
   readonly fleets?: string | null;
-  readonly Events: AsyncCollection<Events>;
+  readonly latLong?: string | null;
+  readonly eventsID?: string | null;
+  readonly email?: string | null;
+  readonly Facebook?: string | null;
+  readonly Twitter?: string | null;
+  readonly street?: string | null;
+  readonly city?: string | null;
+  readonly phone?: string | null;
+  readonly zip?: number | null;
+  readonly state?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type Organizations = LazyLoading extends LazyLoadingDisabled ? EagerOrganizations : LazyOrganizations
+export declare type SailingOrganization = LazyLoading extends LazyLoadingDisabled ? EagerSailingOrganization : LazySailingOrganization
 
-export declare const Organizations: (new (init: ModelInit<Organizations>) => Organizations) & {
-  copyOf(source: Organizations, mutator: (draft: MutableModel<Organizations>) => MutableModel<Organizations> | void): Organizations;
+export declare const SailingOrganization: (new (init: ModelInit<SailingOrganization>) => SailingOrganization) & {
+  copyOf(source: SailingOrganization, mutator: (draft: MutableModel<SailingOrganization>) => MutableModel<SailingOrganization> | void): SailingOrganization;
 }

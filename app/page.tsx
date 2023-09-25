@@ -1,9 +1,13 @@
 import AnnualEvents from '@/components/AnnualEvents'
 import InteractiveMap from '@/components/LeafletMap'
 import WeeklyEvents from '@/components/WeeklyEvents'
-import Image from 'next/image'
+import { SailingOrganization } from '@/src/models'
+import { queryClubs } from '@/utils/utils'
+import { DataStore } from 'aws-amplify'
 
-export default function Home() {
+export default async function Home() {
+  const clubs = DataStore.query(SailingOrganization)
+  console.log('CLUBS: ', await clubs, queryClubs())
   return (
     <main className="flex min-h-screen flex-col items-center justify-between py-20 px-10 bg-gray-50">
       <h1 className="text-4xl font-bold text-center text-gray-800">
@@ -18,7 +22,7 @@ export default function Home() {
       </div>
       <div className='flex w-full my-10 gap-5'>
         <AnnualEvents />
-        <InteractiveMap />
+        <InteractiveMap clubsPromise={clubs}/>
         </div>
         <WeeklyEvents />
     </main>

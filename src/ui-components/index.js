@@ -4,6 +4,8 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as SailingEventCreateForm } from "./SailingEventCreateForm";
+export { default as SailingEventUpdateForm } from "./SailingEventUpdateForm";
+export { default as SailingOrganizationCreateForm } from "./SailingOrganizationCreateForm";
+export { default as SailingOrganizationUpdateForm } from "./SailingOrganizationUpdateForm";
 export { default as studioTheme } from "./studioTheme";
-export { default as OrganizationsCreateForm } from "./OrganizationsCreateForm";
-export { default as OrganizationsUpdateForm } from "./OrganizationsUpdateForm";

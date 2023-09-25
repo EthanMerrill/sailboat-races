@@ -1,28 +1,55 @@
+type AddressType {
+  Street: String
+  City: String
+  State: String
+  Zip: String
+}
+
+enum DayOfTheWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 enum EventType {
-  SERIES
   DISTANCE_RACE
-  LOCAL_EVENT
   PURSUIT_RACE
+  AROUND_CANS
 }
 
-type Events @model @auth(rules: [{allow: public}]) {
+type SailingEvent @model @auth(rules: [{allow: public}]) {
   id: ID!
-  eventName: String
-  eventType: EventType
-  eventDays: String
-  eventDate: String
-  eventDescription: String
-  organizationsID: ID! @index(name: "byOrganizations")
+  name: String!
+  link: String
+  date: AWSDate
+  description: String
+  series: Boolean
+  dayOfWeek: DayOfTheWeek
+  type: EventType
+  hostClubs: [SailingOrganization] @hasMany(indexName: "bySailingEvent", fields: ["id"])
+  weeklyEvent: Boolean
+  startDate: AWSDate
+  endDate: AWSDate
 }
 
-type Organizations @model @auth(rules: [{allow: public}]) {
+type SailingOrganization @model @auth(rules: [{allow: public}]) {
   id: ID!
-  latLong: AWSJSON
-  address: AWSJSON
-  city: String
-  state: String
-  zip: String
-  website: String
+  name: String
+  website: AWSURL
   fleets: String
-  Events: [Events] @hasMany(indexName: "byOrganizations", fields: ["id"])
+  latLong: AWSJSON
+  eventsID: ID @index(name: "bySailingEvent")
+  email: AWSEmail
+  Facebook: AWSURL
+  Twitter: AWSURL
+  street: String
+  city: String
+  phone: AWSPhone
+  zip: Int
+  state: String
 }
+ 

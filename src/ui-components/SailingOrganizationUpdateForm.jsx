@@ -14,13 +14,13 @@ import {
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Organizations } from "../models";
+import { SailingOrganization } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function OrganizationsUpdateForm(props) {
+export default function SailingOrganizationUpdateForm(props) {
   const {
     id: idProp,
-    organizations: organizationsModelProp,
+    sailingOrganization: sailingOrganizationModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -34,64 +34,75 @@ export default function OrganizationsUpdateForm(props) {
     website: "",
     fleets: "",
     latLong: "",
-    phone: "",
     email: "",
     Facebook: "",
     Twitter: "",
+    street: "",
+    city: "",
+    phone: "",
+    zip: "",
+    state: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [website, setWebsite] = React.useState(initialValues.website);
   const [fleets, setFleets] = React.useState(initialValues.fleets);
   const [latLong, setLatLong] = React.useState(initialValues.latLong);
-  const [phone, setPhone] = React.useState(initialValues.phone);
   const [email, setEmail] = React.useState(initialValues.email);
   const [Facebook, setFacebook] = React.useState(initialValues.Facebook);
   const [Twitter, setTwitter] = React.useState(initialValues.Twitter);
+  const [street, setStreet] = React.useState(initialValues.street);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [phone, setPhone] = React.useState(initialValues.phone);
+  const [zip, setZip] = React.useState(initialValues.zip);
+  const [state, setState] = React.useState(initialValues.state);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = organizationsRecord
-      ? { ...initialValues, ...organizationsRecord }
+    const cleanValues = sailingOrganizationRecord
+      ? { ...initialValues, ...sailingOrganizationRecord }
       : initialValues;
     setName(cleanValues.name);
     setWebsite(cleanValues.website);
-    setFleets(
-      typeof cleanValues.fleets === "string"
-        ? cleanValues.fleets
-        : JSON.stringify(cleanValues.fleets)
-    );
+    setFleets(cleanValues.fleets);
     setLatLong(
-      typeof cleanValues.latLong === "string"
+      typeof cleanValues.latLong === "string" || cleanValues.latLong === null
         ? cleanValues.latLong
         : JSON.stringify(cleanValues.latLong)
     );
-    setPhone(cleanValues.phone);
     setEmail(cleanValues.email);
     setFacebook(cleanValues.Facebook);
     setTwitter(cleanValues.Twitter);
+    setStreet(cleanValues.street);
+    setCity(cleanValues.city);
+    setPhone(cleanValues.phone);
+    setZip(cleanValues.zip);
+    setState(cleanValues.state);
     setErrors({});
   };
-  const [organizationsRecord, setOrganizationsRecord] = React.useState(
-    organizationsModelProp
-  );
+  const [sailingOrganizationRecord, setSailingOrganizationRecord] =
+    React.useState(sailingOrganizationModelProp);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(Organizations, idProp)
-        : organizationsModelProp;
-      setOrganizationsRecord(record);
+        ? await DataStore.query(SailingOrganization, idProp)
+        : sailingOrganizationModelProp;
+      setSailingOrganizationRecord(record);
     };
     queryData();
-  }, [idProp, organizationsModelProp]);
-  React.useEffect(resetStateValues, [organizationsRecord]);
+  }, [idProp, sailingOrganizationModelProp]);
+  React.useEffect(resetStateValues, [sailingOrganizationRecord]);
   const validations = {
     name: [],
     website: [{ type: "URL" }],
-    fleets: [{ type: "JSON" }],
+    fleets: [],
     latLong: [{ type: "JSON" }],
-    phone: [{ type: "Phone" }],
     email: [{ type: "Email" }],
     Facebook: [{ type: "URL" }],
     Twitter: [{ type: "URL" }],
+    street: [],
+    city: [],
+    phone: [{ type: "Phone" }],
+    zip: [],
+    state: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -123,10 +134,14 @@ export default function OrganizationsUpdateForm(props) {
           website,
           fleets,
           latLong,
-          phone,
           email,
           Facebook,
           Twitter,
+          street,
+          city,
+          phone,
+          zip,
+          state,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,12 +167,12 @@ export default function OrganizationsUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
-            Organizations.copyOf(organizationsRecord, (updated) => {
+            SailingOrganization.copyOf(sailingOrganizationRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -170,7 +185,7 @@ export default function OrganizationsUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "OrganizationsUpdateForm")}
+      {...getOverrideProps(overrides, "SailingOrganizationUpdateForm")}
       {...rest}
     >
       <TextField
@@ -186,10 +201,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets,
               latLong,
-              phone,
               email,
               Facebook,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -217,10 +236,14 @@ export default function OrganizationsUpdateForm(props) {
               website: value,
               fleets,
               latLong,
-              phone,
               email,
               Facebook,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.website ?? value;
@@ -235,7 +258,7 @@ export default function OrganizationsUpdateForm(props) {
         hasError={errors.website?.hasError}
         {...getOverrideProps(overrides, "website")}
       ></TextField>
-      <TextAreaField
+      <TextField
         label="Fleets"
         isRequired={false}
         isReadOnly={false}
@@ -248,10 +271,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets: value,
               latLong,
-              phone,
               email,
               Facebook,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.fleets ?? value;
@@ -265,7 +292,7 @@ export default function OrganizationsUpdateForm(props) {
         errorMessage={errors.fleets?.errorMessage}
         hasError={errors.fleets?.hasError}
         {...getOverrideProps(overrides, "fleets")}
-      ></TextAreaField>
+      ></TextField>
       <TextAreaField
         label="Lat long"
         isRequired={false}
@@ -279,10 +306,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets,
               latLong: value,
-              phone,
               email,
               Facebook,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.latLong ?? value;
@@ -298,38 +329,6 @@ export default function OrganizationsUpdateForm(props) {
         {...getOverrideProps(overrides, "latLong")}
       ></TextAreaField>
       <TextField
-        label="Phone"
-        isRequired={false}
-        isReadOnly={false}
-        type="tel"
-        value={phone}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              website,
-              fleets,
-              latLong,
-              phone: value,
-              email,
-              Facebook,
-              Twitter,
-            };
-            const result = onChange(modelFields);
-            value = result?.phone ?? value;
-          }
-          if (errors.phone?.hasError) {
-            runValidationTasks("phone", value);
-          }
-          setPhone(value);
-        }}
-        onBlur={() => runValidationTasks("phone", phone)}
-        errorMessage={errors.phone?.errorMessage}
-        hasError={errors.phone?.hasError}
-        {...getOverrideProps(overrides, "phone")}
-      ></TextField>
-      <TextField
         label="Email"
         isRequired={false}
         isReadOnly={false}
@@ -342,10 +341,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets,
               latLong,
-              phone,
               email: value,
               Facebook,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -373,10 +376,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets,
               latLong,
-              phone,
               email,
               Facebook: value,
               Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.Facebook ?? value;
@@ -404,10 +411,14 @@ export default function OrganizationsUpdateForm(props) {
               website,
               fleets,
               latLong,
-              phone,
               email,
               Facebook,
               Twitter: value,
+              street,
+              city,
+              phone,
+              zip,
+              state,
             };
             const result = onChange(modelFields);
             value = result?.Twitter ?? value;
@@ -422,6 +433,186 @@ export default function OrganizationsUpdateForm(props) {
         hasError={errors.Twitter?.hasError}
         {...getOverrideProps(overrides, "Twitter")}
       ></TextField>
+      <TextField
+        label="Street"
+        isRequired={false}
+        isReadOnly={false}
+        value={street}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              website,
+              fleets,
+              latLong,
+              email,
+              Facebook,
+              Twitter,
+              street: value,
+              city,
+              phone,
+              zip,
+              state,
+            };
+            const result = onChange(modelFields);
+            value = result?.street ?? value;
+          }
+          if (errors.street?.hasError) {
+            runValidationTasks("street", value);
+          }
+          setStreet(value);
+        }}
+        onBlur={() => runValidationTasks("street", street)}
+        errorMessage={errors.street?.errorMessage}
+        hasError={errors.street?.hasError}
+        {...getOverrideProps(overrides, "street")}
+      ></TextField>
+      <TextField
+        label="City"
+        isRequired={false}
+        isReadOnly={false}
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              website,
+              fleets,
+              latLong,
+              email,
+              Facebook,
+              Twitter,
+              street,
+              city: value,
+              phone,
+              zip,
+              state,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks("city", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks("city", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, "city")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        type="tel"
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              website,
+              fleets,
+              latLong,
+              email,
+              Facebook,
+              Twitter,
+              street,
+              city,
+              phone: value,
+              zip,
+              state,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
+      ></TextField>
+      <TextField
+        label="Zip"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={zip}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              website,
+              fleets,
+              latLong,
+              email,
+              Facebook,
+              Twitter,
+              street,
+              city,
+              phone,
+              zip: value,
+              state,
+            };
+            const result = onChange(modelFields);
+            value = result?.zip ?? value;
+          }
+          if (errors.zip?.hasError) {
+            runValidationTasks("zip", value);
+          }
+          setZip(value);
+        }}
+        onBlur={() => runValidationTasks("zip", zip)}
+        errorMessage={errors.zip?.errorMessage}
+        hasError={errors.zip?.hasError}
+        {...getOverrideProps(overrides, "zip")}
+      ></TextField>
+      <TextField
+        label="State"
+        isRequired={false}
+        isReadOnly={false}
+        value={state}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              website,
+              fleets,
+              latLong,
+              email,
+              Facebook,
+              Twitter,
+              street,
+              city,
+              phone,
+              zip,
+              state: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.state ?? value;
+          }
+          if (errors.state?.hasError) {
+            runValidationTasks("state", value);
+          }
+          setState(value);
+        }}
+        onBlur={() => runValidationTasks("state", state)}
+        errorMessage={errors.state?.errorMessage}
+        hasError={errors.state?.hasError}
+        {...getOverrideProps(overrides, "state")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -433,7 +624,7 @@ export default function OrganizationsUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || organizationsModelProp)}
+          isDisabled={!(idProp || sailingOrganizationModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -445,7 +636,7 @@ export default function OrganizationsUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || organizationsModelProp) ||
+              !(idProp || sailingOrganizationModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

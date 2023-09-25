@@ -10,6 +10,11 @@
       "StackName": "amplify-sailboatraces-staging-144954",
       "StackId": "arn:aws:cloudformation:us-east-2:580446771729:stack/amplify-sailboatraces-staging-144954/35f957f0-168c-11ee-98fe-02204e50dd01",
       "AmplifyAppId": "d2umiwpktref7q"
+    },
+    "categories": {
+      "function": {
+        "locationFormatter": {}
+      }
     }
   }
 }

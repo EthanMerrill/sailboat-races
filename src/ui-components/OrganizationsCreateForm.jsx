@@ -29,40 +29,56 @@ export default function OrganizationsCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    latLong: "",
     address: "",
     city: "",
     state: "",
     zip: "",
     website: "",
     fleets: "",
+    name: "",
+    phone: "",
+    email: "",
+    Facebook: "",
+    Twitter: "",
   };
-  const [latLong, setLatLong] = React.useState(initialValues.latLong);
   const [address, setAddress] = React.useState(initialValues.address);
   const [city, setCity] = React.useState(initialValues.city);
   const [state, setState] = React.useState(initialValues.state);
   const [zip, setZip] = React.useState(initialValues.zip);
   const [website, setWebsite] = React.useState(initialValues.website);
   const [fleets, setFleets] = React.useState(initialValues.fleets);
+  const [name, setName] = React.useState(initialValues.name);
+  const [phone, setPhone] = React.useState(initialValues.phone);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [Facebook, setFacebook] = React.useState(initialValues.Facebook);
+  const [Twitter, setTwitter] = React.useState(initialValues.Twitter);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setLatLong(initialValues.latLong);
     setAddress(initialValues.address);
     setCity(initialValues.city);
     setState(initialValues.state);
     setZip(initialValues.zip);
     setWebsite(initialValues.website);
     setFleets(initialValues.fleets);
+    setName(initialValues.name);
+    setPhone(initialValues.phone);
+    setEmail(initialValues.email);
+    setFacebook(initialValues.Facebook);
+    setTwitter(initialValues.Twitter);
     setErrors({});
   };
   const validations = {
-    latLong: [{ type: "JSON" }],
     address: [{ type: "JSON" }],
     city: [],
     state: [],
     zip: [],
-    website: [],
+    website: [{ type: "URL" }],
     fleets: [],
+    name: [],
+    phone: [{ type: "Phone" }],
+    email: [{ type: "Email" }],
+    Facebook: [{ type: "URL" }],
+    Twitter: [{ type: "URL" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -90,13 +106,17 @@ export default function OrganizationsCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          latLong,
           address,
           city,
           state,
           zip,
           website,
           fleets,
+          name,
+          phone,
+          email,
+          Facebook,
+          Twitter,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -126,7 +146,19 @@ export default function OrganizationsCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Organizations(modelFields));
+          const modelFieldsToSave = {
+            website: modelFields.website,
+            fleets: modelFields.fleets,
+            name: modelFields.name,
+            phone: modelFields.phone,
+            email: modelFields.email,
+            Facebook: modelFields.Facebook,
+            Twitter: modelFields.Twitter,
+            address: modelFields.address
+              ? JSON.parse(modelFields.address)
+              : modelFields.address,
+          };
+          await DataStore.save(new Organizations(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -143,35 +175,6 @@ export default function OrganizationsCreateForm(props) {
       {...rest}
     >
       <TextAreaField
-        label="Lat long"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              latLong: value,
-              address,
-              city,
-              state,
-              zip,
-              website,
-              fleets,
-            };
-            const result = onChange(modelFields);
-            value = result?.latLong ?? value;
-          }
-          if (errors.latLong?.hasError) {
-            runValidationTasks("latLong", value);
-          }
-          setLatLong(value);
-        }}
-        onBlur={() => runValidationTasks("latLong", latLong)}
-        errorMessage={errors.latLong?.errorMessage}
-        hasError={errors.latLong?.hasError}
-        {...getOverrideProps(overrides, "latLong")}
-      ></TextAreaField>
-      <TextAreaField
         label="Address"
         isRequired={false}
         isReadOnly={false}
@@ -179,13 +182,17 @@ export default function OrganizationsCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address: value,
               city,
               state,
               zip,
               website,
               fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -201,21 +208,23 @@ export default function OrganizationsCreateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextAreaField>
       <TextField
-        label="City"
-        isRequired={false}
-        isReadOnly={false}
+        label="Label"
         value={city}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address,
               city: value,
               state,
               zip,
               website,
               fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -231,21 +240,23 @@ export default function OrganizationsCreateForm(props) {
         {...getOverrideProps(overrides, "city")}
       ></TextField>
       <TextField
-        label="State"
-        isRequired={false}
-        isReadOnly={false}
+        label="Label"
         value={state}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address,
               city,
               state: value,
               zip,
               website,
               fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.state ?? value;
@@ -261,21 +272,23 @@ export default function OrganizationsCreateForm(props) {
         {...getOverrideProps(overrides, "state")}
       ></TextField>
       <TextField
-        label="Zip"
-        isRequired={false}
-        isReadOnly={false}
+        label="Label"
         value={zip}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address,
               city,
               state,
               zip: value,
               website,
               fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.zip ?? value;
@@ -299,13 +312,17 @@ export default function OrganizationsCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address,
               city,
               state,
               zip,
               website: value,
               fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.website ?? value;
@@ -329,13 +346,17 @@ export default function OrganizationsCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              latLong,
               address,
               city,
               state,
               zip,
               website,
               fleets: value,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter,
             };
             const result = onChange(modelFields);
             value = result?.fleets ?? value;
@@ -349,6 +370,177 @@ export default function OrganizationsCreateForm(props) {
         errorMessage={errors.fleets?.errorMessage}
         hasError={errors.fleets?.hasError}
         {...getOverrideProps(overrides, "fleets")}
+      ></TextField>
+      <TextField
+        label="Name"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              address,
+              city,
+              state,
+              zip,
+              website,
+              fleets,
+              name: value,
+              phone,
+              email,
+              Facebook,
+              Twitter,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        type="tel"
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              address,
+              city,
+              state,
+              zip,
+              website,
+              fleets,
+              name,
+              phone: value,
+              email,
+              Facebook,
+              Twitter,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
+      ></TextField>
+      <TextField
+        label="Email"
+        isRequired={false}
+        isReadOnly={false}
+        value={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              address,
+              city,
+              state,
+              zip,
+              website,
+              fleets,
+              name,
+              phone,
+              email: value,
+              Facebook,
+              Twitter,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
+      ></TextField>
+      <TextField
+        label="Facebook"
+        isRequired={false}
+        isReadOnly={false}
+        value={Facebook}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              address,
+              city,
+              state,
+              zip,
+              website,
+              fleets,
+              name,
+              phone,
+              email,
+              Facebook: value,
+              Twitter,
+            };
+            const result = onChange(modelFields);
+            value = result?.Facebook ?? value;
+          }
+          if (errors.Facebook?.hasError) {
+            runValidationTasks("Facebook", value);
+          }
+          setFacebook(value);
+        }}
+        onBlur={() => runValidationTasks("Facebook", Facebook)}
+        errorMessage={errors.Facebook?.errorMessage}
+        hasError={errors.Facebook?.hasError}
+        {...getOverrideProps(overrides, "Facebook")}
+      ></TextField>
+      <TextField
+        label="Twitter"
+        isRequired={false}
+        isReadOnly={false}
+        value={Twitter}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              address,
+              city,
+              state,
+              zip,
+              website,
+              fleets,
+              name,
+              phone,
+              email,
+              Facebook,
+              Twitter: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Twitter ?? value;
+          }
+          if (errors.Twitter?.hasError) {
+            runValidationTasks("Twitter", value);
+          }
+          setTwitter(value);
+        }}
+        onBlur={() => runValidationTasks("Twitter", Twitter)}
+        errorMessage={errors.Twitter?.errorMessage}
+        hasError={errors.Twitter?.hasError}
+        {...getOverrideProps(overrides, "Twitter")}
       ></TextField>
       <Flex
         justifyContent="space-between"

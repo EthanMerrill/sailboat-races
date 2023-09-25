@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Events": {
-            "name": "Events",
+        "SailingEvent": {
+            "name": "SailingEvent",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,15 +10,52 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "eventName": {
-                    "name": "eventName",
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "link": {
+                    "name": "link",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "eventType": {
-                    "name": "eventType",
+                "date": {
+                    "name": "date",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "description": {
+                    "name": "description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "series": {
+                    "name": "series",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "dayOfWeek": {
+                    "name": "dayOfWeek",
+                    "isArray": false,
+                    "type": {
+                        "enum": "DayOfTheWeek"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
                     "isArray": false,
                     "type": {
                         "enum": "EventType"
@@ -26,32 +63,41 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "eventDays": {
-                    "name": "eventDays",
+                "hostClubs": {
+                    "name": "hostClubs",
+                    "isArray": true,
+                    "type": {
+                        "model": "SailingOrganization"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "eventsID"
+                        ]
+                    }
+                },
+                "weeklyEvent": {
+                    "name": "weeklyEvent",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
-                "eventDate": {
-                    "name": "eventDate",
+                "startDate": {
+                    "name": "startDate",
                     "isArray": false,
-                    "type": "String",
+                    "type": "AWSDate",
                     "isRequired": false,
                     "attributes": []
                 },
-                "eventDescription": {
-                    "name": "eventDescription",
+                "endDate": {
+                    "name": "endDate",
                     "isArray": false,
-                    "type": "String",
+                    "type": "AWSDate",
                     "isRequired": false,
-                    "attributes": []
-                },
-                "organizationsID": {
-                    "name": "organizationsID",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -72,20 +118,11 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Events",
+            "pluralName": "SailingEvents",
             "attributes": [
                 {
                     "type": "model",
                     "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byOrganizations",
-                        "fields": [
-                            "organizationsID"
-                        ]
-                    }
                 },
                 {
                     "type": "auth",
@@ -105,8 +142,8 @@ export const schema = {
                 }
             ]
         },
-        "Organizations": {
-            "name": "Organizations",
+        "SailingOrganization": {
+            "name": "SailingOrganization",
             "fields": {
                 "id": {
                     "name": "id",
@@ -115,36 +152,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "latLong": {
-                    "name": "latLong",
-                    "isArray": false,
-                    "type": "AWSJSON",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "address": {
-                    "name": "address",
-                    "isArray": false,
-                    "type": "AWSJSON",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "city": {
-                    "name": "city",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "state": {
-                    "name": "state",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "zip": {
-                    "name": "zip",
+                "name": {
+                    "name": "name",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -153,7 +162,7 @@ export const schema = {
                 "website": {
                     "name": "website",
                     "isArray": false,
-                    "type": "String",
+                    "type": "AWSURL",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -164,21 +173,75 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Events": {
-                    "name": "Events",
-                    "isArray": true,
-                    "type": {
-                        "model": "Events"
-                    },
+                "latLong": {
+                    "name": "latLong",
+                    "isArray": false,
+                    "type": "AWSJSON",
                     "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "organizationsID"
-                        ]
-                    }
+                    "attributes": []
+                },
+                "eventsID": {
+                    "name": "eventsID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "email": {
+                    "name": "email",
+                    "isArray": false,
+                    "type": "AWSEmail",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Facebook": {
+                    "name": "Facebook",
+                    "isArray": false,
+                    "type": "AWSURL",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Twitter": {
+                    "name": "Twitter",
+                    "isArray": false,
+                    "type": "AWSURL",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "street": {
+                    "name": "street",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "city": {
+                    "name": "city",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "phone": {
+                    "name": "phone",
+                    "isArray": false,
+                    "type": "AWSPhone",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "zip": {
+                    "name": "zip",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "state": {
+                    "name": "state",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -198,11 +261,20 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Organizations",
+            "pluralName": "SailingOrganizations",
             "attributes": [
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "bySailingEvent",
+                        "fields": [
+                            "eventsID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -224,17 +296,62 @@ export const schema = {
         }
     },
     "enums": {
+        "DayOfTheWeek": {
+            "name": "DayOfTheWeek",
+            "values": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+            ]
+        },
         "EventType": {
             "name": "EventType",
             "values": [
-                "SERIES",
                 "DISTANCE_RACE",
-                "LOCAL_EVENT",
-                "PURSUIT_RACE"
+                "PURSUIT_RACE",
+                "AROUND_CANS"
             ]
         }
     },
-    "nonModels": {},
+    "nonModels": {
+        "AddressType": {
+            "name": "AddressType",
+            "fields": {
+                "Street": {
+                    "name": "Street",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "City": {
+                    "name": "City",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "State": {
+                    "name": "State",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Zip": {
+                    "name": "Zip",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        }
+    },
     "codegenVersion": "3.4.4",
-    "version": "eec1304ff97c3b8e9ef649bad70d4f25"
+    "version": "e8e4acbf15a26695598efa25245818a7"
 };
