@@ -1,6 +1,0 @@
-{
-  "AppSyncApiName": "sailboatraces",
-  "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-07-11T21:52:39.225Z"
-}
