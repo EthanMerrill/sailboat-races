@@ -1,76 +1,60 @@
-<div align="center">
-  <h1>Minted Directory Astro</h1>
-  <p>Markdown driven directory template. Built with Astro and Tailwindcss. Optimized for SEO. Beautiful Customizable Style</p>
-</div>
+# project aspirations
 
-<br/>
+- a new page for every entry in my scraped data
+- an interactive map with filtering
+- major cities pages
+- sexy icons based on capabilities
+- search bar
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/febde860-00be-408b-8a13-41953f7178e1" alt="Minted Directory Screenshot" />
-</div>
+# TODO
 
-<br/>
+- [ ]
 
-## Features:
-+ 🖌️ Add Listings with markdown.
-+ 🔋 SEO optimizations and pSEO out of the box
-+ 💻 Pre-built components for directories.
-+ 💅 Customizable style.
-+ 🌙 Dark/Light mode
-+ 💸 Sponsored Content
-
-## Getting Started
-
-### Local Development
-
-Duplicate the template then clone the repository.
+# Astro Starter Kit: Basics
 
 ```sh
-git clone git@github.com:youraccount/projectname.git my-directory
+npm create astro@latest -- --template basics
 ```
 
-Or use the github cli to create a repository based on the template and clone in one command:
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-```sh
-gh repo create my-directory --template masterkram/minted-directory-astro --private --clone
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── layouts/
+│   │   └── Layout.astro
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
-Go to the cloned folder:
-```sh
-cd my-directory
-```
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
-Install dependencies
+## 🧞 Commands
 
-```sh
-pnpm install
-```
+All commands are run from the root of the project, from a terminal:
 
-Run the website:
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-```sh
-pnpm dev
-```
+## 👀 Want to learn more?
 
-Congrats :tada:
-
-You can start customizing and building your directory.
-
-## Customization
-
-To customize the directory style:
-+ Change the `primary`, `secondary` color and `fontFamily` in `tailwind.config.ts`
-+ Customize the `src/config/theme-config.toml`
-
-
-### Adding Content
-
-Add listings by adding markdown files to `/src/content/directory`
-
-## Deployment
-
-Deploy as a static site for best SEO performance:
-
-```bash
-pnpm run build
-```
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

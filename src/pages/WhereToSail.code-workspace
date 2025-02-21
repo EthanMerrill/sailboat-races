@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"path": "../../../WhereToSailScraper"
+	},
+	{
+		"path": "../.."
+	}
+],
+  "settings": {
+    "workbench.colorCustomizations": {}
+  }
+}
