@@ -5,6 +5,7 @@
 - major cities pages
 - sexy icons based on capabilities
 - search bar
+- add this: https://krthush.medium.com/how-to-create-link-previews-like-social-media-apps-open-source-api-45797d758200
 
 # TODO
 

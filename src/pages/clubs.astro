@@ -24,14 +24,16 @@ const nonMemberClubs = locations.filter(
 
       <!-- US Sailing Members Section -->
       <section class="mb-12">
-        <h2 class="mb-4 text-2xl font-semibold">US Sailing Member Clubs</h2>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {
             memberClubs.map((Clubs) => (
-              <article class="rounded-lg border p-6 shadow transition-shadow hover:shadow-md">
+              <article
+                class="rounded-lg border p-6 shadow transition-shadow hover:shadow-md"
+                onclick={`window.location.href = '/locations/${Clubs.data.slug}'`}
+              >
                 <h3 class="mb-2 text-xl font-bold">{Clubs.data.Title}</h3>
                 {Clubs.data.Address && (
-                  <p class="mb-2 text-gray-600">📍 {Clubs.data.Address}</p>
+                  <p class="mb-2 text-gray-600">📍 {Clubs.data.City}</p>
                 )}
                 <div class="space-y-2">
                   {Clubs.data["Web Site"] && (
@@ -68,13 +70,6 @@ const nonMemberClubs = locations.filter(
               </article>
             ))
           }
-        </div>
-      </section>
-
-      <!-- Non-Members Section -->
-      <section>
-        <h2 class="mb-4 text-2xl font-semibold">Other Sailing Organizations</h2>
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {
             nonMemberClubs.map((Clubs) => (
               <article class="rounded-lg border p-6 shadow transition-shadow hover:shadow-md">

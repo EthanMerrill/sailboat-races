@@ -31,6 +31,9 @@ const locations = defineCollection({
     "Racing Events": z.string().optional(),
     "Active One Design Fleets": z.string().optional(),
     "Education Programs": z.string().optional(),
+    City: z.string().optional(),
+    State: z.string().optional(),
+    Zip: z.string().optional(),
   }),
 });
 
