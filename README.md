@@ -1,11 +1,17 @@
 # project aspirations
 
-- a new page for every entry in my scraped data
+- [x] a new page for every entry in my scraped data
 - an interactive map with filtering
 - major cities pages
 - sexy icons based on capabilities
-- search bar
+- [x] search bar
 - add this: https://krthush.medium.com/how-to-create-link-previews-like-social-media-apps-open-source-api-45797d758200
+- Add more information about the page, a little about me
+- scrape more data, charters,RYA, etc
+- add a blog
+- add a contact form
+- add a newsletter
+- Sell Other People's Yacht Club Merch
 
 # TODO
 

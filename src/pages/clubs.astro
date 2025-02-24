@@ -1,100 +1,23 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Navbar from "@/components/Navbar";
+import Search from "@/components/Search";
+import ListClubs from "@/components/ListClubs";
 import "@/styles/globals.css";
 
-// Get all location data
 const locations = await getCollection("locations");
-
-// Group locations by type
-const memberClubs = locations.filter(
-  (loc: any) => loc.data.Type === "US Sailing Member",
-);
-const nonMemberClubs = locations.filter(
-  (loc: any) => loc.data.Type === "Non US Sailing Member",
-);
 ---
 
 <Layout title="Sailing Clubs Directory">
   <main class="flex min-h-screen flex-col">
     <Navbar client:load />
     <div class="container mx-auto px-4 py-8">
-      <h1 class="mb-8 text-4xl font-bold">Sailing Clubs Directory</h1>
-
-      <!-- US Sailing Members Section -->
-      <section class="mb-12">
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {
-            memberClubs.map((Clubs) => (
-              <article
-                class="rounded-lg border p-6 shadow transition-shadow hover:shadow-md"
-                onclick={`window.location.href = '/locations/${Clubs.data.slug}'`}
-              >
-                <h3 class="mb-2 text-xl font-bold">{Clubs.data.Title}</h3>
-                {Clubs.data.Address && (
-                  <p class="mb-2 text-gray-600">📍 {Clubs.data.City}</p>
-                )}
-                <div class="space-y-2">
-                  {Clubs.data["Web Site"] && (
-                    <a
-                      href={
-                        typeof Clubs.data["Web Site"] === "string"
-                          ? Clubs.data["Web Site"]
-                          : "#"
-                      }
-                      class="block text-blue-600 hover:underline"
-                      target="_blank"
-                    >
-                      🌐 Website
-                    </a>
-                  )}
-                  {Clubs.data.Phone && (
-                    <p class="text-gray-600">📞 {Clubs.data.Phone}</p>
-                  )}
-                  {Clubs.data.Email && (
-                    <p class="text-gray-600">✉️ {Clubs.data.Email}</p>
-                  )}
-                </div>
-                {Clubs.data.Summary && (
-                  <p class="mt-4 text-gray-700">{Clubs.data.Summary}</p>
-                )}
-                {Clubs.data["Organization Owned Fleets"] && (
-                  <div class="mt-4">
-                    <h4 class="font-semibold">Available Fleets:</h4>
-                    <p class="text-gray-600">
-                      {Clubs.data["Organization Owned Fleets"]}
-                    </p>
-                  </div>
-                )}
-              </article>
-            ))
-          }
-          {
-            nonMemberClubs.map((Clubs) => (
-              <article class="rounded-lg border p-6 shadow transition-shadow hover:shadow-md">
-                <h3 class="mb-2 text-xl font-bold">{Clubs.data.Title}</h3>
-                {Clubs.data.Address && (
-                  <p class="mb-2 text-gray-600">📍 {Clubs.data.Address}</p>
-                )}
-                {Clubs.data["Web Site"] && (
-                  <a
-                    href={
-                      typeof Clubs.data["Web Site"] === "string"
-                        ? Clubs.data["Web Site"]
-                        : "#"
-                    }
-                    class="block text-blue-600 hover:underline"
-                    target="_blank"
-                  >
-                    🌐 Website
-                  </a>
-                )}
-              </article>
-            ))
-          }
-        </div>
-      </section>
+      <div class="mb-8">
+        <h1 class="mb-4 text-4xl font-bold">Sailing Clubs Directory</h1>
+        <Search client:load className="max-w-xl" />
+      </div>
+      <ListClubs client:load clubs={locations} />
     </div>
   </main>
 </Layout>
