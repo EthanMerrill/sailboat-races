@@ -67,9 +67,9 @@ export default function ListClubs({ clubs }: ClubProps) {
                             </div>
                         </div>
                         <div className="flex gap-4 text-sm text-muted-foreground">
-                            {club.data["Web Site"] && (
+                            {club.data.Website && (
                                 <a
-                                    href={club.data["Web Site"]}
+                                    href={club.data.Website}
                                     target="_blank"
                                     className="text-blue-600 hover:underline"
                                     onClick={(e) => e.stopPropagation()}

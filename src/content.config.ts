@@ -11,7 +11,7 @@ const locations = defineCollection({
     slug: z.string(),
     Title: z.string(),
     Address: z.string().optional(),
-    "Web Site": z.string().optional(),
+    Website: z.string().optional(),
     Phone: z.string().optional(),
     Email: z.string().optional(),
     "Organization Owned Fleets": z.string().optional(),
