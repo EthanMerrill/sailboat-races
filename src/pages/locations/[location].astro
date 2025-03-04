@@ -1,6 +1,14 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import "@/styles/globals.css";
+import { parseFleets, parseCommaSeparatedList, cn } from "@/lib/utils";
+
+// Import components
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export async function getStaticPaths() {
   const locations = await getCollection("locations");
@@ -11,102 +19,470 @@ export async function getStaticPaths() {
 }
 
 const { locationData } = Astro.props;
+
+// Parse the data
+const fleets = parseFleets(locationData["Organization Owned Fleets"]);
+const facilities = parseCommaSeparatedList(
+  locationData["Facilities Resources"],
+);
+const accessibilityOptions = parseCommaSeparatedList(
+  locationData["Accessibility Options"],
+);
+const educationPrograms = parseCommaSeparatedList(
+  locationData["Accredited EducationPrograms"],
+);
+const sailors = parseCommaSeparatedList(locationData["Sailors"]);
+const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
 ---
 
 <html>
+  <head>
+    <title>{locationData.Title}</title>
+  </head>
   <body class="min-h-screen bg-gray-50 p-8">
-    <h1 class="mb-8 text-center text-4xl font-bold text-gray-500">
-      {locationData.Title}
-    </h1>
-    <div class="mx-auto max-w-2xl rounded-lg bg-white p-8 shadow-md">
-      <div class="space-y-6">
-        <div class="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            ></path>
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          </svg>
-          <span class="text-gray-700">{locationData.Address}</span>
+    <div class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <!-- Left column - Main info -->
+        <div class="space-y-8 lg:col-span-2">
+          <div class="flex flex-col space-y-4">
+            <!-- Hero image section -->
+            <div
+              class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200"
+            >
+              <div
+                class="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-6"
+              >
+                <h1 class="text-3xl font-bold text-white">
+                  {locationData.Title}
+                </h1>
+                <div class="mt-2 flex items-center text-white/80">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <span>{locationData.Address}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="flex flex-wrap gap-2">
+              {
+                locationData.Type && (
+                  <Badge variant="outline" className="bg-primary/10">
+                    {locationData.Type}
+                  </Badge>
+                )
+              }
+              {
+                locationData.Header && (
+                  <Badge variant="outline" className="bg-primary/10">
+                    {locationData.Header}
+                  </Badge>
+                )
+              }
+              {
+                sailors.map((sailor) => (
+                  <Badge variant="outline" className="bg-primary/10">
+                    {sailor}
+                  </Badge>
+                ))
+              }
+            </div>
+
+            <!-- About Section -->
+            <Card>
+              <div class="p-6">
+                <h2 class="mb-4 text-xl font-semibold">About</h2>
+                <p class="whitespace-pre-line">{locationData.Summary}</p>
+              </div>
+            </Card>
+
+            <!-- Tabs Section -->
+            <div>
+              <Tabs defaultValue="programs" client:load>
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="programs">Programs</TabsTrigger>
+                  <TabsTrigger value="facilities">Facilities</TabsTrigger>
+                  <TabsTrigger value="fleets">Fleets</TabsTrigger>
+                  <TabsTrigger value="racing">Racing</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="programs" className="space-y-4">
+                  <Card>
+                    <div class="p-6">
+                      <h3 class="mb-4 text-xl font-semibold">
+                        Education Programs
+                      </h3>
+                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
+                        {
+                          educationPrograms.map((program) => (
+                            <li class="flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="text-primary mr-2 h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                                />
+                              </svg>
+                              {program}
+                            </li>
+                          ))
+                        }
+                      </ul>
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div class="p-6">
+                      <h3 class="mb-4 text-xl font-semibold">
+                        Rental & Charter
+                      </h3>
+                      <p>{locationData["Rental & Charter"]}</p>
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="facilities">
+                  <Card>
+                    <div class="p-6">
+                      <h3 class="mb-4 text-xl font-semibold">
+                        Facilities & Resources
+                      </h3>
+                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
+                        {
+                          facilities.map((facility) => (
+                            <li class="flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="text-primary mr-2 h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                                />
+                              </svg>
+                              {facility}
+                            </li>
+                          ))
+                        }
+                      </ul>
+
+                      <Separator className="my-4" />
+
+                      <h3 class="mb-2 text-lg font-medium">Accessibility</h3>
+                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
+                        {
+                          accessibilityOptions.map((option) => (
+                            <li class="flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="text-primary mr-2 h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                />
+                              </svg>
+                              {option}
+                            </li>
+                          ))
+                        }
+                      </ul>
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="fleets">
+                  <Card>
+                    <div class="p-6">
+                      <h3 class="mb-4 text-xl font-semibold">Club Fleet</h3>
+                      <div class="grid grid-cols-2 gap-4">
+                        {
+                          fleets.map((fleet) => (
+                            <div class="flex items-center justify-between rounded-md border p-3">
+                              <div class="flex items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="text-primary mr-3 h-5 w-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                                  />
+                                </svg>
+                                <span>{fleet.class}</span>
+                              </div>
+                              <Badge>{fleet.count}</Badge>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="racing">
+                  <Card>
+                    <div class="p-6">
+                      <h3 class="mb-4 text-xl font-semibold">
+                        Racing Information
+                      </h3>
+                      <div class="space-y-4">
+                        <div>
+                          <h4 class="mb-2 text-lg font-medium">Racing Types</h4>
+                          <p>{locationData.Racing}</p>
+                        </div>
+
+                        <div>
+                          <h4 class="mb-2 text-lg font-medium">
+                            Racing Events
+                          </h4>
+                          <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
+                            {
+                              racingEvents.map((event) => (
+                                <li class="flex items-center">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-primary mr-2 h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                  {event}
+                                </li>
+                              ))
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-            ></path>
-          </svg>
-          <a
-            href={locationData["Web Site"]}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 hover:underline">{locationData["Web Site"]}</a
-          >
-        </div>
+        <!-- Right column - Contact info and map -->
+        <div class="space-y-6">
+          <Card>
+            <div class="p-6">
+              <h3 class="mb-4 text-xl font-semibold">Contact Information</h3>
+              <div class="space-y-4">
+                <div class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-primary mr-3 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <p>{locationData.Address}</p>
+                </div>
 
-        <div class="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-            ></path>
-          </svg>
-          <span class="text-gray-700">{locationData.Phone}</span>
-        </div>
+                <div class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-primary mr-3 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    ></path>
+                  </svg>
+                  <p>{locationData.Phone}</p>
+                </div>
 
-        <div class="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            ></path>
-          </svg>
-          <a
-            href={`mailto:${locationData.Email}`}
-            class="text-blue-600 hover:underline">{locationData.Email}</a
-          >
-        </div>
+                <div class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-primary mr-3 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <p>{locationData.Email}</p>
+                </div>
 
-        <div class="mt-6 leading-relaxed text-gray-600">
-          {locationData.Summary}
+                {
+                  locationData["Monitor VHF"] && (
+                    <div class="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="text-primary mr-3 h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                      <p>
+                        VHF:{" "}
+                        {locationData["Monitor VHF"].replace("Channel:", "")}
+                      </p>
+                    </div>
+                  )
+                }
+
+                <Separator />
+
+                <div class="flex flex-col space-y-3">
+                  <Button variant="outline" className="w-full">
+                    <a
+                      href={locationData.Website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit Website
+                    </a>
+                  </Button>
+
+                  <div class="flex gap-2">
+                    {
+                      locationData["Facebook Page"] && (
+                        <Button variant="outline" className="h-10 w-10 p-0">
+                          <a
+                            href={locationData["Facebook Page"]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                            <span class="sr-only">Facebook</span>
+                          </a>
+                        </Button>
+                      )
+                    }
+
+                    {
+                      locationData["Twitter Page"] && (
+                        <Button variant="outline" className="h-10 w-10 p-0">
+                          <a
+                            href={locationData["Twitter Page"]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                            </svg>
+                            <span class="sr-only">Twitter</span>
+                          </a>
+                        </Button>
+                      )
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="p-6">
+              <h3 class="mb-4 text-xl font-semibold">Location</h3>
+              <div
+                class="relative h-64 w-full overflow-hidden rounded-md bg-gray-200"
+              >
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <p class="text-gray-500">
+                    Map of {locationData.City}, {locationData.State}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
