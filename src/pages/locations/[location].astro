@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LocationTabs } from "@/components/LocationTabs";
 
 export async function getStaticPaths() {
   const locations = await getCollection("locations");
@@ -22,6 +22,7 @@ const { locationData } = Astro.props;
 
 // Parse the data
 const fleets = parseFleets(locationData["Organization Owned Fleets"]);
+const oneDesignFleets = parseFleets(locationData["Active One Design Fleet"]);
 const facilities = parseCommaSeparatedList(
   locationData["Facilities Resources"],
 );
@@ -50,7 +51,7 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
               class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200"
             >
               <div
-                class="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-6"
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6"
               >
                 <h1 class="text-3xl font-bold text-white">
                   {locationData.Title}
@@ -115,195 +116,18 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
 
             <!-- Tabs Section -->
             <div>
-              <Tabs defaultValue="programs" client:load>
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="programs">Programs</TabsTrigger>
-                  <TabsTrigger value="facilities">Facilities</TabsTrigger>
-                  <TabsTrigger value="fleets">Fleets</TabsTrigger>
-                  <TabsTrigger value="racing">Racing</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="programs" className="space-y-4">
-                  <Card>
-                    <div class="p-6">
-                      <h3 class="mb-4 text-xl font-semibold">
-                        Education Programs
-                      </h3>
-                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
-                        {
-                          educationPrograms.map((program) => (
-                            <li class="flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="text-primary mr-2 h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                                />
-                              </svg>
-                              {program}
-                            </li>
-                          ))
-                        }
-                      </ul>
-                    </div>
-                  </Card>
-
-                  <Card>
-                    <div class="p-6">
-                      <h3 class="mb-4 text-xl font-semibold">
-                        Rental & Charter
-                      </h3>
-                      <p>{locationData["Rental & Charter"]}</p>
-                    </div>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="facilities">
-                  <Card>
-                    <div class="p-6">
-                      <h3 class="mb-4 text-xl font-semibold">
-                        Facilities & Resources
-                      </h3>
-                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
-                        {
-                          facilities.map((facility) => (
-                            <li class="flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="text-primary mr-2 h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                                />
-                              </svg>
-                              {facility}
-                            </li>
-                          ))
-                        }
-                      </ul>
-
-                      <Separator className="my-4" />
-
-                      <h3 class="mb-2 text-lg font-medium">Accessibility</h3>
-                      <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
-                        {
-                          accessibilityOptions.map((option) => (
-                            <li class="flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="text-primary mr-2 h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                              </svg>
-                              {option}
-                            </li>
-                          ))
-                        }
-                      </ul>
-                    </div>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="fleets">
-                  <Card>
-                    <div class="p-6">
-                      <h3 class="mb-4 text-xl font-semibold">Club Fleet</h3>
-                      <div class="grid grid-cols-2 gap-4">
-                        {
-                          fleets.map((fleet) => (
-                            <div class="flex items-center justify-between rounded-md border p-3">
-                              <div class="flex items-center">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  class="text-primary mr-3 h-5 w-5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                                  />
-                                </svg>
-                                <span>{fleet.class}</span>
-                              </div>
-                              <Badge>{fleet.count}</Badge>
-                            </div>
-                          ))
-                        }
-                      </div>
-                    </div>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="racing">
-                  <Card>
-                    <div class="p-6">
-                      <h3 class="mb-4 text-xl font-semibold">
-                        Racing Information
-                      </h3>
-                      <div class="space-y-4">
-                        <div>
-                          <h4 class="mb-2 text-lg font-medium">Racing Types</h4>
-                          <p>{locationData.Racing}</p>
-                        </div>
-
-                        <div>
-                          <h4 class="mb-2 text-lg font-medium">
-                            Racing Events
-                          </h4>
-                          <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
-                            {
-                              racingEvents.map((event) => (
-                                <li class="flex items-center">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="text-primary mr-2 h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                  </svg>
-                                  {event}
-                                </li>
-                              ))
-                            }
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </TabsContent>
-              </Tabs>
+              <LocationTabs
+                educationPrograms={educationPrograms}
+                facilities={facilities}
+                accessibilityOptions={accessibilityOptions}
+                fleets={[
+                  { name: "Organization Owned Fleets", data: fleets },
+                  { name: "One Design Fleets", data: oneDesignFleets },
+                ]}
+                racingEvents={racingEvents}
+                locationData={locationData}
+                client:load
+              />
             </div>
           </div>
         </div>
@@ -317,7 +141,7 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
                 <div class="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="text-primary mr-3 h-5 w-5"
+                    class="mr-3 h-5 w-5 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -340,7 +164,7 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
                 <div class="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="text-primary mr-3 h-5 w-5"
+                    class="mr-3 h-5 w-5 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -358,7 +182,7 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
                 <div class="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="text-primary mr-3 h-5 w-5"
+                    class="mr-3 h-5 w-5 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -378,7 +202,7 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
                     <div class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="text-primary mr-3 h-5 w-5"
+                        class="mr-3 h-5 w-5 text-primary"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

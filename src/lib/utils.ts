@@ -16,7 +16,7 @@ export function parseFleets(fleetString: string | undefined) {
     const [className, rest] = part.split("Number In Fleet:");
     if (className && rest) {
       fleets.push({
-        class: className.trim(),
+        class: className.trim().replace(/,$/, ""),
         count: Number.parseInt(rest.trim().split(",")[0]) || 0,
       });
     }

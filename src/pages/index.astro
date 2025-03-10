@@ -5,8 +5,8 @@ import Layout from "@/layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
 import ListWebsites from "@/components/ListWebsites";
 import ListTags from "@/components/ListTags";
-import "@/styles/globals.css";
-import "../styles/global.css";
+// import "@/styles/globals.css";
+import "../styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Globe } from "lucide-react";
 ---
@@ -18,7 +18,7 @@ import { Globe } from "lucide-react";
     </head>
     <Navbar client:load />
     <section
-      class="z-10 container mx-auto -mb-32 flex max-w-6xl flex-col px-4 py-16 md:px-8"
+      class="container z-10 mx-auto -mb-32 flex max-w-6xl flex-col px-4 py-16 md:px-8"
     >
       <div class="flex flex-col items-end gap-8 md:flex-row md:gap-16">
         <div class="col-span-2 flex flex-1 flex-col">
@@ -29,16 +29,16 @@ import { Globe } from "lucide-react";
           <Search client:load className="w-full" />
         </div>
         <div
-          class="bg-background flex aspect-video w-96 max-w-full items-center justify-center rounded border border-dashed shadow"
+          class="flex aspect-video w-96 max-w-full items-center justify-center rounded border border-dashed bg-background shadow"
         >
-          <span class="text-muted-foreground font-light"
+          <span class="font-light text-muted-foreground"
             >Featured banner goes here</span
           >
         </div>
       </div>
     </section>
     <section
-      class="to-red to-muted dark:to-muted h-32 bg-gradient-to-b from-white dark:from-black"
+      class="to-red h-32 bg-gradient-to-b from-white to-muted dark:from-black dark:to-muted"
     >
     </section>
     <section class={cn("flex-1 bg-muted")}>
@@ -47,7 +47,7 @@ import { Globe } from "lucide-react";
     <section class={cn("flex-1 bg-muted pb-4 md:pb-12")}>
       <ListWebsites client:load />
     </section>
-    <footer class="pt-4 pb-32 md:pt-8 md:pb-8">
+    <footer class="pb-32 pt-4 md:pb-8 md:pt-8">
       <div class="container mx-auto px-4 text-sm md:px-0">
         <div
           class="flex flex-col-reverse items-center justify-between gap-2 md:flex-row"

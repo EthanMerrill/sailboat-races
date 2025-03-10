@@ -3,15 +3,22 @@ import { defineConfig } from "astro/config";
 
 import react from "@astrojs/react";
 
-import tailwindcss from "@tailwindcss/vite";
+// import tailwindcss from "@tailwindcss/vite";
+import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    react(),
+    react({
+      experimentalReactChildren: true,
+    }),//
+    tailwind({//
+      applyBaseStyles: false,//
+    }),//
+
   ],
 
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  // vite: {
+  //   plugins: [tailwindcss()],
+  // },
 });
