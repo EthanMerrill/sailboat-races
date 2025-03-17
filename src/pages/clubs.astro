@@ -7,6 +7,8 @@ import ListClubs from "@/components/ListClubs";
 import "@/styles/globals.css";
 
 const locations = await getCollection("locations");
+// generate array of locations
+const locationsArray = locations.map((location) => location.data);
 ---
 
 <Layout title="Sailing Clubs Directory">
@@ -17,7 +19,7 @@ const locations = await getCollection("locations");
         <h1 class="mb-4 text-4xl font-bold">Sailing Clubs Directory</h1>
         <Search client:load className="max-w-xl" />
       </div>
-      <ListClubs client:load clubs={locations} />
+      <ListClubs {...locationsArray} client:load />
     </div>
   </main>
 </Layout>

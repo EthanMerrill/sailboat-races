@@ -1,0 +1,66 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import "@/styles/globals.css";
+
+// Get all location data
+const locations = await getCollection("locations");
+
+// Generate lists of paths
+const locationPaths = locations.map(
+  (location) => `/locations/${location.data.slug}`,
+);
+
+// Generate city paths
+const cities = [
+  ...new Set(
+    locations
+      .filter((location) => location.data.City)
+      .map((location) => location.data.City),
+  ),
+];
+
+const cityPaths = cities.map(
+  (city) => `/cities/${city?.toLowerCase().replace(/\s+/g, "-")}`,
+);
+---
+
+<Layout title="Debug Routes">
+  <div class="container mx-auto p-8">
+    <h1 class="mb-6 text-3xl font-bold">All Generated Routes</h1>
+
+    <div class="mb-8">
+      <h2 class="mb-4 text-2xl font-semibold">
+        Location Routes ({locationPaths.length})
+      </h2>
+      <ul class="list-disc space-y-1 pl-6">
+        {
+          locationPaths.map((path) => (
+            <li>
+              <a href={path} class="text-blue-600 hover:underline">
+                {path}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-2xl font-semibold">
+        City Routes ({cityPaths.length})
+      </h2>
+      <ul class="list-disc space-y-1 pl-6">
+        {
+          cityPaths.map((path) => (
+            <li>
+              <a href={path} class="text-blue-600 hover:underline">
+                {path}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Layout>

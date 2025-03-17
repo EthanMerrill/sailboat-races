@@ -1,0 +1,6 @@
+- What is the difference between a yacht club and community sailing program?
+- How to save your yacht club. First. Stop calling it a yacht club
+- Where to start sailing
+- How to get on bigger boats
+- Why don't more people sail
+- How to learn to sail

@@ -120,10 +120,10 @@ const racingEvents = parseCommaSeparatedList(locationData["Racing Events"]);
                 educationPrograms={educationPrograms}
                 facilities={facilities}
                 accessibilityOptions={accessibilityOptions}
-                fleets={[
-                  { name: "Organization Owned Fleets", data: fleets },
-                  { name: "One Design Fleets", data: oneDesignFleets },
-                ]}
+                fleets={{
+                  organizationOwned: fleets,
+                  oneDesign: oneDesignFleets,
+                }}
                 racingEvents={racingEvents}
                 locationData={locationData}
                 client:load

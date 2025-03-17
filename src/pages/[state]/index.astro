@@ -1,0 +1,57 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { filterClubsByState } from "../../lib/utils.js";
+import { getCollection } from "astro:content";
+import type { LocationData } from "@/content.config";
+import ListClubs from "../../components/ListClubs";
+import "@/styles/globals.css";
+
+export async function getStaticPaths() {
+  const allClubs = await getCollection("locations");
+  const states = [
+    ...new Set(allClubs.map((club) => club.data.State).filter(Boolean)),
+  ];
+
+  // Map the filtered clubs to LocationData array
+  var clubsArray: LocationData[] = allClubs.map((club) => club.data);
+
+  return states.map((state) => ({
+    params: { state: state?.toLowerCase() },
+    props: {
+      stateName: state,
+      clubs: filterClubsByState(clubsArray, state!),
+    },
+  }));
+}
+
+const { state } = Astro.params;
+const { stateName, clubs } = Astro.props;
+---
+
+<Layout title={`Sailing Clubs in ${stateName}`}>
+  <main class="container mx-auto px-4 py-8">
+    <div class="space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col space-y-2">
+        <h1 class="text-4xl font-bold">Sailing Clubs in {stateName}</h1>
+        <p class="text-muted-foreground">
+          Discover {clubs.length} sailing clubs and community programs in {
+            stateName
+          }
+        </p>
+      </div>
+
+      <!-- Map Section (Placeholder) -->
+      <div class="relative h-64 w-full overflow-hidden rounded-lg bg-muted">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <p class="text-muted-foreground">
+            Map of Sailing Clubs in {stateName}
+          </p>
+        </div>
+      </div>
+
+      <!-- Club List with Search and Filters -->
+      <ListClubs clubs={clubs} />
+    </div>
+  </main>
+</Layout>

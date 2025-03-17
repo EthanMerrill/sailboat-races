@@ -4,8 +4,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface fleetData {
-    name: string;
-    data: { class: string; count: number }[]
+    oneDesign: { class: string; count: number }[];
+    organizationOwned: { class: string; count: number }[]
 }
 
 
@@ -13,7 +13,7 @@ interface LocationTabsProps {
     educationPrograms: string[];
     facilities: string[];
     accessibilityOptions: string[];
-    fleets: fleetData[];
+    fleets: fleetData;
     racingEvents: string[];
     locationData: any;
 }
@@ -133,7 +133,7 @@ export function LocationTabs({
                         <h3 className="mb-4 text-xl font-semibold">Organization Owned Fleets</h3>
                         <p>Fleets owned by the club or group which are often used for classes or events</p>
                         <div className="grid grid-cols-2 gap-4">
-                            {fleets[0].data.map((fleet, index) => (
+                            {fleets.organizationOwned.map((fleet, index) => (
                                 <div
                                     key={index}
                                     className="flex items-center justify-between rounded-md border p-3"
@@ -162,7 +162,7 @@ export function LocationTabs({
                         <h3 className="mb-4 text-xl font-semibold">Active One Design Fleets</h3>
                         <p>Types of <a href="https://en.wikipedia.org/wiki/One-design_racing#Sailing:~:text=%5B8%5D-,Sailing,-%5Bedit%5D">one design</a> sailboat fleets active at this location. Often these fleets conduct weekly races.</p>
                         <div className="grid grid-cols-2 gap-4">
-                            {fleets[1].data.map((fleet, index) => (
+                            {fleets.oneDesign.map((fleet, index) => (
                                 <div
                                     key={index}
                                     className="flex items-center justify-between rounded-md border p-3"
