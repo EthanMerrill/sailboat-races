@@ -2,13 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { searchKeyword } from "@/store";
 import { useStore } from "@nanostores/react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import type { LocationData } from "@/content.config"; // Import the type
 import "@/styles/globals.css";
 
 
 
-export default function ListClubs({ clubs = [] }: { clubs?: LocationData[] }) {
+export default function ListClubs({ clubs }: { clubs: LocationData[] }) {
     const search = useStore(searchKeyword);
 
     const filteredClubs = useMemo(() => {
@@ -20,7 +20,12 @@ export default function ListClubs({ clubs = [] }: { clubs?: LocationData[] }) {
         });
 
     }, [search, clubs]);
-    console.log(" Clubs: ", clubs);
+
+    // Better logging with useEffect to see when clubs changes
+    useEffect(() => {
+        console.log("Clubs data:", clubs ? `${clubs.length} clubs loaded` : "clubs is undefined");
+    }, [clubs]);
+
     return (
         <div className={cn(
             "container mx-auto px-4 md:px-0",

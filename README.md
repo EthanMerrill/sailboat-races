@@ -1,10 +1,27 @@
 # project aspirations
 
+### MVP TODO
+
 - [x] a new page for every entry in my scraped data
-- an interactive map with filtering
-- major cities pages
-- sexy icons based on capabilities
+- [x] show and hide sections based on data availability
+- [x] update homepage to show where to sail
 - [x] search bar
+- [ ] UI Cleanup but specifically
+  - [ ] make a universal card component for clubs
+  - [ ] Make badges make sense
+  - [ ] update Iconography where it makes sense, remove otherwise
+  - [ ] Add custom colors, fonts, and styles to the theme
+
+## POST MVP TODO
+
+- [ ] add mapping for each club, will require geo-coding via apis to lat long
+- [ ] add a map to the homepage
+- [ ] add a badge if they are in the american association of yachtclubs
+- [ ] add a formalness indicator, like a yacht club vs a community sailing program
+- [ ] badge tooltips
+- an interactive map with filtering
+- ## major cities pages
+- sexy icons based on capabilities
 - add this: https://krthush.medium.com/how-to-create-link-previews-like-social-media-apps-open-source-api-45797d758200
 - Add more information about the page, a little about me
 - scrape more data, charters,RYA, etc
@@ -12,6 +29,7 @@
 - add a contact form
 - add a newsletter
 - Sell Other People's Yacht Club Merch
+- Add Yacht clubs and their per foot pricing
 
 # TODO
 
