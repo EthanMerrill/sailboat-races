@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 interface fleetData {
     oneDesign: { class: string; count: number }[];
@@ -49,10 +50,16 @@ export function LocationTabs({
 
     // Default to the first available tab
     const defaultTab = availableTabs[0].id;
+    console.log("Available Tabs:", availableTabs); // Debugging line
 
     return (
         <Tabs defaultValue={defaultTab}>
-            <TabsList className={`grid w-full grid-cols-${availableTabs.length}`}>
+            <TabsList className={cn("grid w-full", {
+                'grid-cols-1': availableTabs.length === 1,
+                'grid-cols-2': availableTabs.length === 2,
+                'grid-cols-3': availableTabs.length === 3,
+                'grid-cols-4': availableTabs.length === 4,
+            })}>
                 {availableTabs.map(tab => (
                     <TabsTrigger key={tab.id} value={tab.id}>
                         {tab.label}

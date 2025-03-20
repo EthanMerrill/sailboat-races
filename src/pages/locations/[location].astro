@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { LocationTabs } from "@/components/LocationTabs";
 import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/heroSection.astro";
 
 export async function getStaticPaths() {
   const locations = await getCollection("locations");
@@ -76,45 +77,12 @@ const hasSocialMedia =
           <div class="space-y-8 lg:col-span-2">
             <div class="flex flex-col space-y-4">
               <!-- Hero image section -->
-              <div
-                class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200"
-              >
-                <div
-                  class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6"
-                >
-                  <h1 class="text-3xl font-bold text-white">
-                    {locationData.Title}
-                  </h1>
-                  {
-                    locationData.Address && (
-                      <div class="mt-2 flex items-center text-white/80">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="mr-2 h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                        <span>{locationData.Address}</span>
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
-
+              <HeroSection
+                title={locationData.Title}
+                address={locationData.City && locationData.State
+                  ? `${locationData.City}, ${locationData.State}`
+                  : null}
+              />
               <!-- Badges - Only show if we have badges -->
               {
                 hasBadges && (

@@ -7,7 +7,10 @@
 - [x] update homepage to show where to sail
 - [x] search bar
 - [ ] UI Cleanup but specifically
-  - [ ] make a universal card component for clubs
+  - [x] make a universal card component for clubs
+  - [x] make a component for hero image and pattern if no image
+  - [ ] make a component for location
+  - [ ] make a component for facilities labels with icons
   - [ ] Make badges make sense
   - [ ] update Iconography where it makes sense, remove otherwise
   - [ ] Add custom colors, fonts, and styles to the theme
@@ -19,6 +22,7 @@
 - [ ] add a badge if they are in the american association of yachtclubs
 - [ ] add a formalness indicator, like a yacht club vs a community sailing program
 - [ ] badge tooltips
+- [ ] search by badge
 - an interactive map with filtering
 - ## major cities pages
 - sexy icons based on capabilities
@@ -28,7 +32,7 @@
 - add a blog
 - add a contact form
 - add a newsletter
-- Sell Other People's Yacht Club Merch
+- Sell Other People's Yachts Club Merch
 - Add Yacht clubs and their per foot pricing
 
 # TODO
