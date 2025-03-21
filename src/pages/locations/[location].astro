@@ -10,7 +10,8 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { LocationTabs } from "@/components/LocationTabs";
 import Layout from "@/layouts/Layout.astro";
-import HeroSection from "@/components/heroSection.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import MiniMap from "@/components/MiniMap.astro";
 
 export async function getStaticPaths() {
   const locations = await getCollection("locations");
@@ -56,7 +57,8 @@ const hasAnyContactInfo =
   locationData.Phone ||
   locationData.Email ||
   locationData["Monitor VHF"];
-const hasLocationInfo = locationData.City && locationData.State;
+// const hasLocationInfo = locationData.City && locationData.State;
+const hasLocationInfo = false; // Temporarily set to false to hide the map
 const hasSocialMedia =
   locationData["Facebook Page"] || locationData["Twitter Page"];
 ---
@@ -323,18 +325,7 @@ const hasSocialMedia =
 
             {
               hasLocationInfo && (
-                <Card>
-                  <div class="p-6">
-                    <h3 class="mb-4 text-xl font-semibold">Location</h3>
-                    <div class="relative h-64 w-full overflow-hidden rounded-md bg-gray-200">
-                      <div class="absolute inset-0 flex items-center justify-center">
-                        <p class="text-gray-500">
-                          Map of {locationData.City}, {locationData.State}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <MiniMap City={locationData.City} State={locationData.State} />
               )
             }
           </div>

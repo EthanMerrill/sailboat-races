@@ -1,0 +1,17 @@
+---
+import { Card } from "@/components/ui/card";
+const { City, State } = Astro.props;
+---
+
+<Card>
+  <div class="p-6">
+    <h3 class="mb-4 text-xl font-semibold">Location</h3>
+    <div class="relative h-64 w-full overflow-hidden rounded-md bg-gray-200">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <p class="text-gray-500">
+          Map of {City}, {State}
+        </p>
+      </div>
+    </div>
+  </div>
+</Card>

@@ -1,5 +1,6 @@
 ---
 import { cn } from "@/lib/utils";
+import Header from "@/components/Header.astro";
 const { title, description } = Astro.props;
 
 const url = "https://placeholder.com";
@@ -70,6 +71,7 @@ const image = "/public/preview.webp";
     </script>
   </head>
   <body class={cn("bg-background font-sans text-primary")}>
+    <Header />
     <slot />
   </body>
 </html>
