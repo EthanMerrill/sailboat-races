@@ -8,7 +8,9 @@ import "@/styles/globals.css";
 
 const locations = await getCollection("locations");
 // generate array of locations
-const locationsArray = locations.map((location) => location.data);
+const locationsArray = locations.map(
+  (location: { data: any }) => location.data,
+);
 ---
 
 <Layout title="Sailing Clubs Directory">
