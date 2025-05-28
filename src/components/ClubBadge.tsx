@@ -14,11 +14,11 @@ export default function ClubBadge({ club }: { club: LocationData }) {
                 key={club.Title}
                 className={cn(
                     "rounded bg-background p-4 shadow",
-                    "flex flex-col gap-4 cursor-pointer hover:shadow-md transition-shadow"
+                    "flex flex-col gap-4 cursor-pointer hover:shadow-md transition-shadow hover:no-underline hover:bg-muted",
                 )}
                 href={`/locations/${club.slug}`}
             >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 no-underline">
                     <h3 className="text-xl font-bold">{club.Title}</h3>
                     {club.City && (
                         <p className="text-gray-600">📍 {club.City}</p>
@@ -57,7 +57,7 @@ export default function ClubBadge({ club }: { club: LocationData }) {
                             <a
                                 href={club.Website}
                                 target="_blank"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-100 no-underline hover:no-underline"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 🌐 Website

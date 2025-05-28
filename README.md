@@ -14,8 +14,9 @@
   - [ ] Make badges make sense
   - [ ] update Iconography where it makes sense, remove otherwise
   - [ ] Add custom colors, fonts, and styles to the theme
-  - [ ] add ethan-components footer
+  - [x] add ethan-components footer
   - [/] add a header
+    - [ ] fix state paths in header
   - [ ] add ui cue for the type of organization (yacht club, sailing school, etc)
 
 ## POST MVP TODO

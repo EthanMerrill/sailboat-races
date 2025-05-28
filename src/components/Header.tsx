@@ -37,13 +37,12 @@ export default function Header(props: { cites: (string | undefined)[], states: (
                 <NavigationMenuTrigger>Cities</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   {allCities.map((city) => (
-                    <NavigationMenuLink href={`/${city}`} className={navigationMenuTriggerStyle()}>{city}</NavigationMenuLink>
+                    <NavigationMenuLink href={`/${city}`} className={navigationMenuTriggerStyle()}>{city?.slice(3)}</NavigationMenuLink>
                   ))}
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Link Two</NavigationMenuLink>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Link Two</NavigationMenuLink>
+              <NavigationMenuLink href={`/about`} className={navigationMenuTriggerStyle()}>About</NavigationMenuLink>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
